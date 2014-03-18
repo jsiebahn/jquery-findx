@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Examples of jQuery.findX</title>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js" type="text/javascript"></script>
+    <script src="../src/jquery.findX.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var doExample = function(example, successColor) {
+
+            var root = example.children('.root:first');
+
+            var element = example.find('.element');
+
+            if (element.length == 0) {
+                return;
+            }
+
+            var selector = example.data('selector');
+
+            element.findX(selector, root).css('color', successColor);
+
+        };
+
+        var checkExample = function(example, successColor) {
+            example.find('*').each(function() {
+                var element = $(this);
+                if (!element.is('.target') && element.css('color') == successColor) {
+                    example.addClass('fail');
+                }
+                if (element.is('.target') && element.css('color') != successColor) {
+                    example.addClass('fail');
+                }
+            });
+            if (!example.is('.fail')) {
+                example.addClass('success');
+            }
+        };
+
+        $(function() {
+            $('.example').each(function() {
+                var example = $(this);
+                var successColor = $('<div/>').css('color', 'green').css('color');
+                doExample(example, successColor);
+                checkExample(example, successColor);
+            });
+        });
+    </script>
+    <style type="text/css">
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 18px;
+        }
+
+        /* The target of an example is rendered red by default to see when it is not affected. */
+        /* Any .target should be rendered green when the example found the target element. */
+        .target {
+            color: red;
+        }
+
+        /* Initial examples are rendered grey. If an example is not run it will stay grey. */
+        .example {
+            margin: 10px;
+            padding: 9px;
+            border: 1px solid #999;
+            background: #eee;
+        }
+
+        /* Successful examples are rendered green. .success is added after the example is run. */
+        .example.success {
+            background: #efe;
+            border-color: green;
+        }
+
+        /* Failed examples are rendered red. .fail is added after the example is run. */
+        .example.fail {
+            background: #fee;
+            border-color: red;
+        }
+
+        /* The .failExample worked as expected if the target is not affected. */
+        /* So it should be green on fail. */
+        .example.fail.failExample {
+            background: #efe;
+            border-color: green;
+        }
+
+        /* Show the selector which is used in the example. */
+        .example:before {
+            content: attr(data-selector);
+            display: block;
+            margin: -9px -9px 9px -9px;
+            padding: 3px 9px;
+            border-bottom: 1px solid #999;
+            background: #ddd;
+            font-family: monospace;
+        }
+        .example.success:before {
+            background: #cec;
+        }
+        .example.fail:before {
+            background: #ecc;
+        }
+        .example.fail.failExample:before {
+            background: #cec;
+        }
+
+        /* Show nesting of the elements in the example. */
+        .example div.root div {
+            margin: 1px;
+            padding: 3px;
+            border: 1px solid #bbb;
+        }
+
+        /* Automatically render the class attribute to show which element is rendered. */
+        .example div.root div:before {
+            content: attr(class);
+        }
+
+        /* The .element is the rendered start of the relative selectors and is rendered bold. */
+        .example .element {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="example" data-selector="- .target">
+    <div class="root">
+        <div class="target"></div>
+        <div class="element"></div>
+    </div>
+</div>
+
+<div class="example" data-selector="< .target">
+    <div class="root">
+        <div class="target"></div>
+        <div class="element"></div>
+    </div>
+</div>
+
+<div class="example" data-selector=".. .parent ~- .prev .target">
+    <div class="root">
+        <div class="prev">
+            <div class="target"></div>
+        </div>
+        <div class="noTarget"></div>
+        <div class="parent">
+            <div class="element"></div>
+        </div>
+    </div>
+</div>
+
+<div class="example" data-selector=".. .parent - .prev .target">
+    <div class="root">
+        <div class="prev">
+            <div class="target"></div>
+        </div>
+        <div class="parent">
+            <div class="element"></div>
+        </div>
+    </div>
+</div>
+
+<div class="example" data-selector="/ > .targetParent > .target">
+    <div class="root">
+        <div class="targetParent">
+            <div class="target"></div>
+        </div>
+        <div class="elementParent">
+            <div class="element"></div>
+        </div>
+    </div>
+</div>
+
+<div class="example" data-selector="/ > .targetParent > .multiTarget:first">
+    <div class="root">
+        <div class="targetParent">
+            <div class="target multiTarget"></div>
+            <div class="multiTarget"></div>
+        </div>
+        <div class="elementParent">
+            <div class="element"></div>
+        </div>
+    </div>
+</div>
+
+<div class="example" data-selector=".. .parent - .prev .noTarget">
+    <div class="root">
+        <div class="prev">
+            <div class="noTarget"></div>
+        </div>
+        <div class="any"></div>
+        <div class="parent">
+            <div class="element"></div>
+        </div>
+    </div>
+</div>
+
+<div class="example" data-selector=".">
+    <div class="root">
+        <div class="parent">
+            <div class="element target"></div>
+        </div>
+    </div>
+</div>
+
+<div class="example" data-selector=".. .parent:first .child .selected">
+    <div class="root">
+        <div class="parent">
+            <div class="parent">
+                <div class="element"></div>
+                <div class="child">
+                    <div class="target selected"></div>
+                </div>
+            </div>
+            <div class="child">
+                <div class="selected"></div>
+            </div>
+        </div>
+        <div class="parent">
+            <div class="element"></div>
+            <div class="child">
+                <div class="target selected"></div>
+            </div>
+        </div>
+        <div class="child">
+            <div class="selected"></div>
+        </div>
+    </div>
+</div>
+
+<div class="example failExample" data-selector=".">
+    This example should fail as it has no element. It is used to check that the other examples
+    stay in their context.
+    <div class="root">
+        <div class="target"></div>
+        <div class="noTarget"></div>
+        <div class="multiTarget"></div>
+    </div>
+</div>
+
+</body>
+</html>
