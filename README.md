@@ -81,7 +81,7 @@ jQuery.findX supports these new selectors:
 License
 -------
 
-jQuery.findX is released under the terms of the [MIT License](MIT-LICENSE).
+jQuery.findX is released under the terms of the [MIT License](LICENSE).
 
 
 Authors
