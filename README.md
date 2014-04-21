@@ -1,7 +1,8 @@
 jQuery.findX
 ============
 
-A jQuery plugin to find elements relative to others with a single string.
+A jQuery plugin that extends jquery.find() by selectors to go up with parent and parents and
+to go back with prev and prevAll.
 
 Visit [jQuery.findX on Github](https://github.com/jsiebahn/jquery-findx) for sources and examples.
 
@@ -80,7 +81,7 @@ jQuery.findX supports these new selectors:
 License
 -------
 
-jQuery.findX is released under the terms of the [MIT License](LICENSE).
+jQuery.findX is released under the terms of the [MIT License](MIT-LICENSE).
 
 
 Authors
